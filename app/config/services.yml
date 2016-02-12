@@ -1,0 +1,56 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+
+services:
+
+    command.import:
+        class: AppBundle\Command\ImportCommand
+        calls:
+            - [setImporter, ["@downloading_importer"]]
+        tags:
+            -  { name: console.command }
+
+    downloading_importer:
+        class: AppBundle\Service\DownloadingImporter
+        autowire: true
+        arguments:
+            - "%default_graph_download_file%"
+
+    importer:
+        class: AppBundle\Service\Import\Importer
+        autowire: true
+
+    downloader:
+        class: AppBundle\Service\Download\Downloader
+        autowire: true
+        arguments:
+            - "%download_folder%"
+
+    jms_serializer.object_constructor:
+        alias: "jms_serializer.enhanced_doctrine_object_constructor"
+        public: false
+
+    jms_serializer.enhanced_doctrine_object_constructor:
+        class: AppBundle\Service\Serializer\Construction\DoctrineObjectConstructor
+        arguments:
+              - "@doctrine"
+              - "@jms_serializer.unserialize_object_constructor"
+
+    jms_serializer.entity_handler:
+        class: AppBundle\Service\Serializer\IdHavingHandler
+        arguments: [ "AppBundle\\Model\\Entity" ]
+        autowire: true
+        tags:
+            -  { name: jms_serializer.subscribing_handler }
+
+    jms_serializer.listener.post_serialization_persist:
+        class: AppBundle\Service\Serializer\EventHandler\PostSerializeDoctrinePersist
+        autowire: true
+        tags:
+            - { name: jms_serializer.event_subscriber }
+
+    # guzzle http client
+    guzzlehttp.client:
+        class: GuzzleHttp\Client
+        autowiring_types: GuzzleHttp\ClientInterface
