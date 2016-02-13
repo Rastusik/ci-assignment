@@ -15,7 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @author mfris
  * @package AppBundle\Model\Entity
  * @ORM\Entity
- * @ORM\Table(name="node")
+ * @ORM\Table(name="node", options={"comment":"A one to one mapping to the XML graph node"})
  * @UniqueEntity("id")
  */
 class NodeEntity extends AbstractEntity
@@ -33,6 +33,7 @@ class NodeEntity extends AbstractEntity
      * @var GraphEntity
      * @ORM\ManyToOne(targetEntity="AppBundle\Model\Entity\GraphEntity", inversedBy="nodes")
      * @ORM\JoinColumn(name="graph_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(options={"comment":"A mandatory reference to the graph."})
      * @Assert\NotNull()
      */
     private $graph;

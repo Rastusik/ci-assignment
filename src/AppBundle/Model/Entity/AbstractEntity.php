@@ -19,7 +19,7 @@ abstract class AbstractEntity
     /**
      * @var string
      * @ORM\Id
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", options={"comment":"A string identifier, imported from the XML file"})
      * @JMS\Type("string")
      * @Assert\NotBlank()
      */

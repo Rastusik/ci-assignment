@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author mfris
  * @package AppBundle\Model\Entity
  * @ORM\Entity
- * @ORM\Table(name="graph")
+ * @ORM\Table(name="graph", options={"comment":"A one to one mapping to the XML graph"})
  * @JMS\XmlRoot("graph")
  */
 class GraphEntity extends AbstractEntity
