@@ -47,4 +47,36 @@ class EdgeEntity extends AbstractEntity
      * @JMS\Type("double")
      */
     private $cost = 0;
+
+    /**
+     * @return string
+     */
+    public function getId() : string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return NodeEntity
+     */
+    public function getFrom() : NodeEntity
+    {
+        return $this->from;
+    }
+
+    /**
+     * @return NodeEntity
+     */
+    public function getTo() : NodeEntity
+    {
+        return $this->to;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCost() : float
+    {
+        return $this->cost;
+    }
 }

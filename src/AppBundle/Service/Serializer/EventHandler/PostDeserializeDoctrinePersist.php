@@ -14,7 +14,7 @@ use JMS\Serializer\EventDispatcher\ObjectEvent;
  * @author mfris
  * @package AppBundle\Service\Serializer\EventHandler
  */
-final class PostSerializeDoctrinePersist implements EventSubscriberInterface
+final class PostDeserializeDoctrinePersist implements EventSubscriberInterface
 {
 
     /**

@@ -44,8 +44,14 @@ services:
         tags:
             -  { name: jms_serializer.subscribing_handler }
 
-    jms_serializer.listener.post_serialization_persist:
-        class: AppBundle\Service\Serializer\EventHandler\PostSerializeDoctrinePersist
+    jms_serializer.listener.post_deserialization_persist:
+        class: AppBundle\Service\Serializer\EventHandler\PostDeserializeDoctrinePersist
+        autowire: true
+        tags:
+            - { name: jms_serializer.event_subscriber }
+
+    jms_serializer.listener.post_deserialization_graph_assign:
+        class: AppBundle\Service\Serializer\EventHandler\PostDeserializeGraphAssign
         autowire: true
         tags:
             - { name: jms_serializer.event_subscriber }

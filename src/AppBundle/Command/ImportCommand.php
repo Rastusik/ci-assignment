@@ -57,6 +57,7 @@ final class ImportCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln("Processing ...");
         $graphFileUrl = $input->getOption('download');
         $result = $this->importer->downloadAndImport($graphFileUrl);
 

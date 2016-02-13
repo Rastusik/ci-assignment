@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20160212230347 extends AbstractMigration
+class Version20160213010343 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -21,9 +21,12 @@ class Version20160212230347 extends AbstractMigration
         $this->addSql('CREATE TABLE edge (id VARCHAR(255) NOT NULL, from_id VARCHAR(255) DEFAULT NULL, to_id VARCHAR(255) DEFAULT NULL, cost NUMERIC(7, 2) DEFAULT \'0\' NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_7506D36678CED90B ON edge (from_id)');
         $this->addSql('CREATE INDEX IDX_7506D36630354A65 ON edge (to_id)');
-        $this->addSql('CREATE TABLE node (id VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE graph (id VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE node (id VARCHAR(255) NOT NULL, graph_id VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_857FE84599134837 ON node (graph_id)');
         $this->addSql('ALTER TABLE edge ADD CONSTRAINT FK_7506D36678CED90B FOREIGN KEY (from_id) REFERENCES node (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE edge ADD CONSTRAINT FK_7506D36630354A65 FOREIGN KEY (to_id) REFERENCES node (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE node ADD CONSTRAINT FK_857FE84599134837 FOREIGN KEY (graph_id) REFERENCES graph (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
     /**
@@ -35,9 +38,11 @@ class Version20160212230347 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE SCHEMA public');
+        $this->addSql('ALTER TABLE node DROP CONSTRAINT FK_857FE84599134837');
         $this->addSql('ALTER TABLE edge DROP CONSTRAINT FK_7506D36678CED90B');
         $this->addSql('ALTER TABLE edge DROP CONSTRAINT FK_7506D36630354A65');
         $this->addSql('DROP TABLE edge');
+        $this->addSql('DROP TABLE graph');
         $this->addSql('DROP TABLE node');
     }
 }

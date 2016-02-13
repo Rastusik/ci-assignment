@@ -7,6 +7,7 @@ namespace AppBundle\Model\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\ExpressionLanguage\Node\Node;
 
 /**
  * Class NodeEntity
@@ -32,6 +33,13 @@ class NodeEntity extends AbstractEntity
      * @JMS\Type("string")
      */
     private $name;
+
+    /**
+     * @var GraphEntity
+     * @ORM\ManyToOne(targetEntity="AppBundle\Model\Entity\GraphEntity", inversedBy="nodes")
+     * @ORM\JoinColumn(name="graph_id", referencedColumnName="id", nullable=false)
+     */
+    private $graph;
 
     /**
      * @var ArrayCollection
@@ -60,5 +68,56 @@ class NodeEntity extends AbstractEntity
     {
         $this->edgesFrom = new ArrayCollection();
         $this->edgesTo = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function getId() : string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName() : string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return GraphEntity
+     */
+    public function getGraph() : GraphEntity
+    {
+        return $this->graph;
+    }
+
+    /**
+     * @param GraphEntity $graph
+     * @return NodeEntity
+     */
+    public function setGraph(GraphEntity $graph) : NodeEntity
+    {
+        $this->graph = $graph;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getEdgesFrom() : ArrayCollection
+    {
+        return $this->edgesFrom;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getEdgesTo() : ArrayCollection
+    {
+        return $this->edgesTo;
     }
 }

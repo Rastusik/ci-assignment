@@ -4,7 +4,7 @@
  */
 namespace AppBundle\Service\Import;
 
-use AppBundle\Model\Dao\Graph;
+use AppBundle\Model\Entity\GraphEntity;
 use Doctrine\ORM\EntityManager;
 use JMS\Serializer\Serializer;
 use SplFileObject;
@@ -47,8 +47,8 @@ final class Importer
         try {
             $fileContent = $file->fread($file->getSize());
 
-            /* @var $graph Graph */
-            $this->serializer->deserialize($fileContent, Graph::class, 'xml');
+            /* @var $graph GraphEntity */
+            $this->serializer->deserialize($fileContent, GraphEntity::class, 'xml');
             $this->em->flush();
             $this->em->clear();
         } catch (\Exception $e) {
