@@ -7,6 +7,7 @@ namespace AppBundle\Model\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class GraphEntity
@@ -21,16 +22,9 @@ class GraphEntity extends AbstractEntity
 
     /**
      * @var string
-     * @ORM\Id()
      * @ORM\Column(type="string")
      * @JMS\Type("string")
-     */
-    private $id;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     * @JMS\Type("string")
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -43,6 +37,8 @@ class GraphEntity extends AbstractEntity
      * )
      * @JMS\XmlList(entry="node")
      * @JMS\Type("ArrayCollection<AppBundle\Model\Entity\NodeEntity>")
+     * @Assert\Count(min = "1")
+     * @Assert\Valid()
      */
     private $nodes;
 
@@ -50,6 +46,7 @@ class GraphEntity extends AbstractEntity
      * @var ArrayCollection
      * @JMS\XmlList(entry="node")
      * @JMS\Type("ArrayCollection<AppBundle\Model\Entity\EdgeEntity>")
+     * @Assert\Valid()
      */
     private $edges;
 
@@ -60,14 +57,6 @@ class GraphEntity extends AbstractEntity
     {
         $this->nodes = new ArrayCollection();
         $this->edges = new ArrayCollection();
-    }
-
-    /**
-     * @return string
-     */
-    public function getId() : string
-    {
-        return $this->id;
     }
 
     /**

@@ -52,7 +52,7 @@ final class PostDeserializeDoctrinePersist implements EventSubscriberInterface
     {
         $object = $event->getObject();
 
-        if (!$object instanceof AbstractEntity) {
+        if (!$object instanceof AbstractEntity || !$object->getId()) {
             return;
         }
 

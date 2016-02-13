@@ -7,7 +7,8 @@ namespace AppBundle\Model\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Symfony\Component\ExpressionLanguage\Node\Node;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class NodeEntity
@@ -15,22 +16,16 @@ use Symfony\Component\ExpressionLanguage\Node\Node;
  * @package AppBundle\Model\Entity
  * @ORM\Entity
  * @ORM\Table(name="node")
+ * @UniqueEntity("id")
  */
 class NodeEntity extends AbstractEntity
 {
 
     /**
      * @var string
-     * @ORM\Id
-     * @ORM\Column(type="string")
-     * @JMS\Type("string")
-     */
-    private $id;
-
-    /**
-     * @var string
      * @ORM\Column(type="string");
      * @JMS\Type("string")
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -38,6 +33,7 @@ class NodeEntity extends AbstractEntity
      * @var GraphEntity
      * @ORM\ManyToOne(targetEntity="AppBundle\Model\Entity\GraphEntity", inversedBy="nodes")
      * @ORM\JoinColumn(name="graph_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotNull()
      */
     private $graph;
 
@@ -68,14 +64,6 @@ class NodeEntity extends AbstractEntity
     {
         $this->edgesFrom = new ArrayCollection();
         $this->edgesTo = new ArrayCollection();
-    }
-
-    /**
-     * @return string
-     */
-    public function getId() : string
-    {
-        return $this->id;
     }
 
     /**

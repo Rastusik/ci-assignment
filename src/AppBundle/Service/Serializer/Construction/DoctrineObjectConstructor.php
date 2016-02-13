@@ -20,11 +20,14 @@ namespace AppBundle\Service\Serializer\Construction;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\UnitOfWork;
 use JMS\Serializer\Construction\ObjectConstructorInterface;
 use JMS\Serializer\VisitorInterface;
 use JMS\Serializer\Metadata\ClassMetadata;
 use JMS\Serializer\DeserializationContext;
 use SimpleXMLElement;
+use RuntimeException;
 
 /**
  * Doctrine object constructor for new (or existing) objects during deserialization.
@@ -43,6 +46,11 @@ class DoctrineObjectConstructor implements ObjectConstructorInterface
     private $fallbackConstructor;
 
     /**
+     * @var array
+     */
+    private $newIds = [];
+
+    /**
      * Constructor.
      *
      * @param ManagerRegistry            $managerRegistry     Manager registry
@@ -56,6 +64,7 @@ class DoctrineObjectConstructor implements ObjectConstructorInterface
 
     /**
      * {@inheritdoc}
+     * @throws RuntimeException
      */
     public function construct(
         VisitorInterface $visitor,
@@ -87,6 +96,13 @@ class DoctrineObjectConstructor implements ObjectConstructorInterface
         }
 
         if ($id && ($entity = $objectManager->find($metadata->name, $id))) {
+            /* @var $objectManager EntityManager */
+            if ($this->isNewIdRegistered($metadata->name, $id)) {
+                throw new RuntimeException("Not a unique entity '{$metadata->name}' with identifier '{$id}''");
+            }
+
+            $this->registerNewId($metadata->name, $id);
+
             return $entity;
         }
 
@@ -124,5 +140,28 @@ class DoctrineObjectConstructor implements ObjectConstructorInterface
         }
 
         return $id;
+    }
+
+    /**
+     * @param string $className
+     * @param string $id
+     * @return bool
+     */
+    private function isNewIdRegistered(string $className, string $id) : bool
+    {
+        return isset($this->newIds[$className]) && isset($this->newIds[$className][$id]);
+    }
+
+    /**
+     * @param string $className
+     * @param string $id
+     */
+    private function registerNewId(string $className, string $id)
+    {
+        if (!isset($this->newIds[$className])) {
+            $this->newIds[$className] = [];
+        }
+
+        $this->newIds[$className][$id] = $id;
     }
 }
