@@ -21,6 +21,14 @@ class EdgeEntity extends AbstractEntity
 {
 
     /**
+     * @var GraphEntity
+     * @ORM\ManyToOne(targetEntity="AppBundle\Model\Entity\GraphEntity", inversedBy="edges")
+     * @ORM\JoinColumn(name="graph_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotNull()
+     */
+    private $graph;
+
+    /**
      * @var NodeEntity
      * @ORM\ManyToOne(targetEntity="NodeEntity", inversedBy="edgesFrom")
      * @ORM\JoinColumn(
@@ -28,7 +36,6 @@ class EdgeEntity extends AbstractEntity
      *     referencedColumnName="id",
      *     nullable=false
      * )
-     * @ORM\Column(options={"comment":"A mandatory reference to the source node."})
      * @JMS\Type("IdHaving<'NodeEntity'>")
      * @Assert\NotNull()
      */
@@ -42,7 +49,6 @@ class EdgeEntity extends AbstractEntity
      *     referencedColumnName="id",
      *     nullable=false
      * )
-     * @ORM\Column(options={"comment":"A mandatory reference to the destination node."})
      * @JMS\Type("IdHaving<'NodeEntity'>")
      * @Assert\NotNull()
      */
@@ -65,6 +71,25 @@ class EdgeEntity extends AbstractEntity
      * @Assert\Type(type="numeric")
      */
     private $cost = 0;
+
+    /**
+     * @return GraphEntity
+     */
+    public function getGraph() : GraphEntity
+    {
+        return $this->graph;
+    }
+
+    /**
+     * @param GraphEntity $graph
+     * @return EdgeEntity
+     */
+    public function setGraph(GraphEntity $graph) : EdgeEntity
+    {
+        $this->graph = $graph;
+
+        return $this;
+    }
 
     /**
      * @return NodeEntity

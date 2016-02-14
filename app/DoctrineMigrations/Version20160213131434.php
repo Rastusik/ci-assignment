@@ -18,16 +18,16 @@ class Version20160213131434 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('CREATE TABLE edge (id VARCHAR(255) NOT NULL, "from" VARCHAR(255) NOT NULL, "to" VARCHAR(255) NOT NULL, cost NUMERIC(7, 2) DEFAULT \'0\' NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE edge (id VARCHAR(255) NOT NULL, "from_id" VARCHAR(255) NOT NULL, "to_id" VARCHAR(255) NOT NULL, cost NUMERIC(7, 2) DEFAULT \'0\' NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN edge.id IS \'A string identifier, imported from the XML file\'');
-        $this->addSql('COMMENT ON COLUMN edge."from" IS \'A mandatory reference to the source node.\'');
-        $this->addSql('COMMENT ON COLUMN edge."to" IS \'A mandatory reference to the destination node.\'');
+        $this->addSql('COMMENT ON COLUMN edge."from_id" IS \'A mandatory reference to the source node.\'');
+        $this->addSql('COMMENT ON COLUMN edge."to_id" IS \'A mandatory reference to the destination node.\'');
         $this->addSql('COMMENT ON COLUMN edge.cost IS \'Unsigned value is checked during validation.\'');
         $this->addSql('CREATE TABLE graph (id VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN graph.id IS \'A string identifier, imported from the XML file\'');
-        $this->addSql('CREATE TABLE node (id VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, graph VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE node (id VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, graph_id VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN node.id IS \'A string identifier, imported from the XML file\'');
-        $this->addSql('COMMENT ON COLUMN node.graph IS \'A mandatory reference to the graph.\'');
+        $this->addSql('COMMENT ON COLUMN node.graph_id IS \'A mandatory reference to the graph.\'');
     }
 
     /**

@@ -33,7 +33,6 @@ class NodeEntity extends AbstractEntity
      * @var GraphEntity
      * @ORM\ManyToOne(targetEntity="AppBundle\Model\Entity\GraphEntity", inversedBy="nodes")
      * @ORM\JoinColumn(name="graph_id", referencedColumnName="id", nullable=false)
-     * @ORM\Column(options={"comment":"A mandatory reference to the graph."})
      * @Assert\NotNull()
      */
     private $graph;

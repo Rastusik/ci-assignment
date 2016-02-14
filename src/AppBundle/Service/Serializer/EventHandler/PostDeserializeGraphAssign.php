@@ -4,6 +4,7 @@
  */
 namespace AppBundle\Service\Serializer\EventHandler;
 
+use AppBundle\Model\Entity\EdgeEntity;
 use AppBundle\Model\Entity\GraphEntity;
 use AppBundle\Model\Entity\NodeEntity;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
@@ -42,6 +43,11 @@ final class PostDeserializeGraphAssign implements EventSubscriberInterface
             foreach ($object->getNodes() as $node) {
                 /* @var $node NodeEntity */
                 $node->setGraph($object);
+            }
+
+            foreach ($object->getEdges() as $edge) {
+                /* @var $edge EdgeEntity */
+                $edge->setGraph($object);
             }
         }
     }

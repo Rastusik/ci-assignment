@@ -71,6 +71,8 @@ final class ImportCommand extends Command
             'Error importing graph data:'
             . PHP_EOL . PHP_EOL
             . $result->getException()->getMessage()
+            . PHP_EOL . PHP_EOL
+            . $result->getException()->getFile() . ":" . $result->getException()->getLine()
         );
 
         return false;
