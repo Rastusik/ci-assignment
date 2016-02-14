@@ -1,6 +1,7 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
+    jms_serializer.json_serialization_visitor.options: 128 #'@=constant("JSON_PRETTY_PRINT")'
 
 services:
 
@@ -8,6 +9,14 @@ services:
         class: AppBundle\Command\ImportCommand
         calls:
             - [setImporter, ["@downloading_importer"]]
+        tags:
+            -  { name: console.command }
+
+    command.query:
+        class: AppBundle\Command\QueryCommand
+        calls:
+            - [setSerializer, ["@jms_serializer"]]
+            - [setPathFinder, ["@pathfinder"]]
         tags:
             -  { name: console.command }
 
@@ -26,6 +35,15 @@ services:
         autowire: true
         arguments:
             - "%download_folder%"
+
+    pathfinder:
+        class: AppBundle\Service\PathFinding\PathFinder
+        autowire: true
+
+    repository.path:
+        class: AppBundle\Service\Repository\PathRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments: [\AppBundle\Model\Entity\PathEntity]
 
     jms_serializer.object_constructor:
         alias: "jms_serializer.enhanced_doctrine_object_constructor"

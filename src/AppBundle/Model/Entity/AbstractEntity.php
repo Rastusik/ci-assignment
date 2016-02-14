@@ -4,6 +4,7 @@
  */
 namespace AppBundle\Model\Entity;
 
+use AppBundle\Model\Common\IdHavingInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author mfris
  * @package AppBundle\Model\Entity
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements IdHavingInterface
 {
 
     /**

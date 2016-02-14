@@ -1,0 +1,14 @@
+{
+  "queries": [
+    {
+      "type": "paths",
+      "start" : "a",
+      "end" : "e"
+    },
+    {
+      "type": "cheapest",
+      "start" : "e",
+      "end" : "a"
+    }
+  ]
+}

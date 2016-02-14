@@ -11,7 +11,7 @@ a normalized graph structure in a relational database (at least in my opinion).
 The identifiers of the nodes and edges are of the type string, so it is easy to map them to the XML input
 and it is easy to update them with XML file updates. (not working 100% right now, because nobody required this feature).
 The nodes and edges are keeping their relation to the corresponding graph, so it is possible to import
-multiple graph structures (under the condition that the edge identifiers stay unique between graphs).
+multiple graph structures (under the condition that the node and edge identifiers stay unique between graphs).
 
 4) SQL query for finding the cycles in the database:
 
@@ -29,3 +29,9 @@ union all
 
 Warning - this query only works if there is at least one edge coming out of each node and if there are no 
 separate clusters in the graph.
+
+5) I created a view named 'path' which finds all the paths of the graph and can be restricted to find
+only paths between two endpoints using a WHERE clause. The query is not optimal, because it always calculates all
+the existing paths between all the nodes. Since this is just a test, I didn't want to optimize the query, because
+the code will be thrown away anyway, but if I wanted to optimize the query properly, so it would only search for the
+requested paths, I would probably use this method: http://explainextended.com/2010/12/24/postgresql-parametrizing-a-recursive-cte/
