@@ -46,15 +46,15 @@ multiple graph structures (under the condition that the node and edge identifier
 4) SQL query for finding the cycles in the database:
 
 ```sql
-with recursive paths (node, depth, path, cycle) as (
-  select (select id from first_node), 0, ARRAY[(select id from first_node)], false
-union all
-  select to_id, depth + 1, (path || to_id::text), to_id = ANY(path)
-  from edge, paths
-  where from_id = node and not cycle
-), first_node as (
-  select id::text from node order by id offset 0 limit 1
-) select path[array_position(path, path[array_upper(path, 1)]):array_upper(path, 1)] from paths where cycle
+WITH RECURSIVE paths (node, depth, path, cycle) AS (
+  SELECT (SELECT id FROM first_node), 0, ARRAY[(SELECT id FROM first_node)], false
+UNION ALL
+  SELECT to_id, depth + 1, (path || to_id::text), to_id = ANY(path)
+  FROM edge, paths
+  WHERE from_id = node AND NOT cycle
+), first_node AS (
+  SELECT id::text FROM node ORDER BY id OFFSET 0 LIMIT 1
+) SELECT path[array_position(path, path[array_upper(path, 1)]):array_upper(path, 1)] FROM paths WHERE cycle
 ```
 
 Warning - this query only works if there is at least one edge coming out of each node and if there are no 
